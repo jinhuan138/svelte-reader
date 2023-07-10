@@ -1,6 +1,5 @@
 {
   "name": "svelte-reader",
-  "private": true,
   "version": "1.0.0",
   "type": "module",
   "keywords": [
@@ -23,5 +22,8 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "epubjs": "^0.3.93"
   }
 }
