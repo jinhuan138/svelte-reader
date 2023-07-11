@@ -1,9 +1,10 @@
 <script lang="ts">
   import EpubView from "../EpubView/EpubView.svelte";
-  //Props
-  export let showToc = false;
-  export let url = "/files/alice.epub";
+
+  export let showToc = true;
+  export let url = '';
   export let title = "";
+
   let bookName = "",
     tocChanged,
     getRendition;
@@ -26,6 +27,11 @@
 
   const toggleToc = () => {
     expandedToc = !expandedToc;
+  };
+
+  const setLocation = (href: string | number) => {
+    epubRef?.setLocation(href);
+    expandedToc = false;
   };
 
   const pre = () => {
@@ -87,34 +93,53 @@
     >
       ›
     </button>
-    <!-- 目录 -->
-    {#if showToc}
-    <div class="tocArea">
-      <div v-for="(item, index) in toc" :key="index">
-        <button type="button" class="tocAreaButton" @click="setLocation(item.href)"
-          :class="{ active: currentLocation ? item.href.includes(currentLocation.start.href) : false }">
-          {{ item.label }}
-          <!-- 展开 -->
-          <div class="expansion" v-if="item.subitems && item.subitems.length > 0"
-            :style="{ transform: item.expansion ? 'rotate(180deg)' : 'rotate(0deg)' }"
-            @click.stop="item.expansion = !item.expansion"></div>
-        </button>
-        <!-- 二级目录 -->
-        <template v-if="item.subitems && item.subitems.length > 0">
-          <div v-show="item.expansion">
-            <button type="button" v-for="(subitem, index) in item.subitems" :key="index" class="tocAreaButton"
-              @click="setLocation(subitem['href'])"
-              :class="{ active: currentLocation ? subitem['href'].includes(currentLocation.start.href) : false }">
-              {{ "&nbsp;".repeat(4) + subitem['label'] }}
-            </button>
-          </div>
-        </template>
-      </div>
-    </div>
-  
-    // <div v-if="expandedToc" class="tocBackground" @click="toggleToc"></div>
-    {/if}
   </div>
+  <!-- 目录 -->
+  {#if showToc}
+    <div class="tocArea">
+      {#each toc as item, index}
+        <div>
+          <button
+            type="button"
+            on:click={() => setLocation(item.href)}
+            class="tocAreaButton"
+            class:active={currentLocation &&
+              item.href.includes(currentLocation.start.href)}
+          >
+            {item.label}
+            <!-- 展开 -->
+            {#if item.subitems && item.subitems.length > 0}
+              <div
+                class="expansion"
+                style="transform: {item.expansion
+                  ? 'rotate(180deg)'
+                  : 'rotate(0deg)'} "
+                on:click|stopPropagation={(item.expansion = !item.expansion)}
+              />
+            {/if}
+            <!-- 二级目录 -->
+            {#if item.subitems && item.subitems.length > 0}
+              <div style="display:{item.expansion ? 'hidden' : ''}">
+                {#each item.subitems as subitem, index}
+                  <button
+                    type="button"
+                    class="tocAreaButton"
+                    on:click={() => setLocation(subitem["href"])}
+                    class:active={currentLocation &&
+                      subitem["href"].includes(currentLocation.start.href)}
+                  >
+                    {"&nbsp;".repeat(4) + subitem["label"]}
+                  </button>{/each}
+              </div>
+            {/if}
+          </button>
+        </div>
+      {/each}
+    </div>
+    {#if expandedToc}
+      <div class="tocBackground" on:click={toggleToc} />
+    {/if}
+  {/if}
 </div>
 
 <style>
