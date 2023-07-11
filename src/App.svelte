@@ -1,9 +1,11 @@
 <script lang="ts">
-  import Reader from "./modules/index";
+  import { SvelteReader} from "svelte-reader";
 </script>
 
 <main>
-  <Reader />
+  <div style='height: 100vh'>
+    <SvelteReader url='/files/啼笑因缘.epub'/>
+ </div>
 </main>
 
 <style>

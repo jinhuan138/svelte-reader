@@ -7,7 +7,7 @@
     wheelListener,
     keyListener,
   } from "../utils/listener/listener";
-  //props
+
   export let url = "";
   export let getRendition;
   export let location;
@@ -16,17 +16,17 @@
   export let handleKeyPress;
   export let epubInitOptions = {};
   export let epubOptions = {};
-  //data
+
   let book: null | Book = null,
     rendition: null | Rendition = null,
     viewer = null;
 
   let isLoaded = false;
   let toc = [];
+
   const initBook = () => {
     if (book) book.destroy();
     if (url) book = ePub(url, epubInitOptions);
-    console.log(book, url);
     book!.loaded.navigation.then(({ toc: _toc }) => {
       isLoaded = true;
       toc = _toc;
@@ -95,6 +95,11 @@
 
   export const prevPage = () => {
     rendition?.prev();
+  };
+
+  export const setLocation = (href: number | string) => {
+    if (typeof href === "string") rendition!.display(href);
+    if (typeof href === "number") rendition!.display(href);
   };
 
   $: {
