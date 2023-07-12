@@ -2,7 +2,7 @@
   import EpubView from "../EpubView/EpubView.svelte";
 
   export let showToc = true;
-  export let url = '';
+  export let url = "";
   export let title = "";
 
   let bookName = "",
@@ -248,16 +248,6 @@
     margin-top: -12px;
   }
 
-  .subitem-enter-active,
-  .subitem-leave-active {
-    transition: opacity 0 ease;
-  }
-
-  .subitem-enter-from,
-  .subitem-leave-to {
-    opacity: 0;
-  }
-
   .tocArea .tocAreaButton .expansion::after {
     border-style: solid;
     border-width: 0 2px 2px 0;
@@ -324,7 +314,7 @@
     color: #e2e2e2;
   }
 
-  .prev {
+  .pre {
     left: 1px;
   }
 

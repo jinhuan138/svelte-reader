@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { SvelteReader} from "svelte-reader";
+  import { SvelteReader} from "../lib/index.min.js";
+  // import { SvelteReader} from "./modules/index";
 </script>
 
 <main>
