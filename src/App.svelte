@@ -1,16 +1,8 @@
 <script lang="ts">
-  import { SvelteReader} from "../lib/index.min.js";
-  // import { SvelteReader} from "./modules/index";
+  import Router from "svelte-spa-router";
+  import routes from "./router/index";
 </script>
 
 <main>
-  <div style='height: 100vh'>
-    <SvelteReader url='/files/啼笑因缘.epub'/>
- </div>
+  <Router {routes} />
 </main>
-
-<style>
-  main {
-    height: 100vh;
-  }
-</style>

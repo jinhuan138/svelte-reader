@@ -7,6 +7,9 @@ dependencies:
   epubjs:
     specifier: ^0.3.93
     version: 0.3.93
+  svelte-spa-router:
+    specifier: ^3.3.0
+    version: 3.3.0
 
 devDependencies:
   '@rollup/plugin-babel':
@@ -2609,6 +2612,11 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /regexparam@2.0.1:
+    resolution: {integrity: sha512-zRgSaYemnNYxUv+/5SeoHI0eJIgTL/A2pUtXUPLHQxUldagouJ9p+K6IbIZ/JiQuCEv2E2B1O11SjVQy3aMCkw==}
+    engines: {node: '>=8'}
+    dev: false
+
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -3030,6 +3038,12 @@ packages:
       svelte: 3.58.0
       typescript: 5.1.6
     dev: true
+
+  /svelte-spa-router@3.3.0:
+    resolution: {integrity: sha512-cwRNe7cxD43sCvSfEeaKiNZg3FCizGxeMcf7CPiWRP3jKXjEma3vxyyuDtPOam6nWbVxl9TNM3hlE/i87ZlqcQ==}
+    dependencies:
+      regexparam: 2.0.1
+    dev: false
 
   /svelte@3.58.0:
     resolution: {integrity: sha512-brIBNNB76mXFmU/Kerm4wFnkskBbluBDCjx/8TcpYRb298Yh2dztS2kQ6bhtjMcvUhd5ynClfwpz5h2gnzdQ1A==}
