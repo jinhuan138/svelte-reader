@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import EpubView from "../EpubView/EpubView.svelte";
+
+  const dispatch = createEventDispatcher();
 
   export let showToc = true;
   export let url = "";
@@ -73,10 +76,10 @@
       {url}
       tocChanged={onTocChange}
       getRendition={onGetRendition}
+      {...$$props}
+      on:update:location={(e) => dispatch("update:location", e.detail)}
     >
-      <slot name="loadingView">
-        <div class="loadingView">Loading…</div>
-      </slot>
+      <slot name="loadingView" />
     </EpubView>
     <!-- 翻页 -->
     <button
@@ -114,25 +117,26 @@
                 style="transform: {item.expansion
                   ? 'rotate(180deg)'
                   : 'rotate(0deg)'} "
-                on:click|stopPropagation={(item.expansion = !item.expansion)}
+                on:click|stopPropagation={(e) =>
+                  (item.expansion = !item.expansion)}
               />
             {/if}
-            <!-- 二级目录 -->
-            {#if item.subitems && item.subitems.length > 0}
-              <div style="display:{item.expansion ? 'hidden' : ''}">
-                {#each item.subitems as subitem, index}
-                  <button
-                    type="button"
-                    class="tocAreaButton"
-                    on:click={() => setLocation(subitem["href"])}
-                    class:active={currentLocation &&
-                      subitem["href"].includes(currentLocation.start.href)}
-                  >
-                    {"&nbsp;".repeat(4) + subitem["label"]}
-                  </button>{/each}
-              </div>
-            {/if}
           </button>
+          <!-- 二级目录 -->
+          {#if item.subitems && item.subitems.length > 0}
+            <div style="display:{item.expansion ? 'none' : ''}">
+              {#each item.subitems as subitem, index}
+                <button
+                  type="button"
+                  class="tocAreaButton"
+                  on:click={() => setLocation(subitem["href"])}
+                  class:active={currentLocation &&
+                    subitem["href"].includes(currentLocation.start.href)}
+                >
+                  {" ".repeat(4) + subitem["label"]}
+                </button>{/each}
+            </div>
+          {/if}
         </div>
       {/each}
     </div>

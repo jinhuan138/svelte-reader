@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import ePub, { Book, Rendition, Contents } from "epubjs";
   import {
     clickListener,
@@ -16,6 +16,8 @@
   export let handleKeyPress;
   export let epubInitOptions = {};
   export let epubOptions = {};
+
+  const dispatch = createEventDispatcher();
 
   let book: null | Book = null,
     rendition: null | Rendition = null,
@@ -45,8 +47,8 @@
     getRendition && getRendition(rendition);
     if (typeof location === "string") {
       rendition.display(location);
-    } else if (typeof location?.value === "number") {
-      rendition.display(location.value);
+    } else if (typeof location === "number") {
+      rendition.display(location);
     } else if (toc.length > 0 && toc[0]?.href) {
       rendition.display(toc[0].href);
     } else {
@@ -57,10 +59,36 @@
   const onLocationChange = (loc: Rendition["location"]) => {
     //监听翻页
     const newLocation = loc && loc.start;
-    if (location?.value !== newLocation) {
-      // emit("update:location", newLocation);
+    if (location !== newLocation) {
+      dispatch("update:location", newLocation);
     }
   };
+
+  const debounce = (func: Function, wait: number = 500) => {
+    let timeout: NodeJS.Timeout | null;
+    return function executedFunction(...args: Array<any>) {
+      const later = () => {
+        timeout = null;
+        func(...args);
+      };
+      clearTimeout(timeout as NodeJS.Timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  $: {
+    if (location) {
+      const display = debounce((val: string | number) => {
+        if (typeof val === "string") {
+          rendition?.display(val);
+        }
+        if (typeof val === "number") {
+          rendition?.display(val);
+        }
+      });
+      display();
+    }
+  }
 
   const flipPage = (direction: string) => {
     if (direction === "next") nextPage();
@@ -116,11 +144,13 @@
     <div
       bind:this={viewer}
       id="viewer"
-      style="display:{isLoaded ? 'hidden' : ''}"
+      style="display:{isLoaded ? '' : 'none'}"
     />
-    {#if isLoaded}
+    {#if !isLoaded}
       <div>
-        <slot name="loadingView" />
+        <slot name="loadingView">
+          <div class="loadingView">Loading…</div>
+        </slot>
       </div>
     {/if}
   </div>
@@ -140,5 +170,16 @@
 
   #viewer {
     height: 100%;
+  }
+
+  /* loading */
+  .loadingView {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    color: #ccc;
+    text-align: center;
+    margin-top: -0.5em;
   }
 </style>
