@@ -14,5 +14,8 @@ export default defineConfig({
   },
   server: {
     port: 8030,
+  },
+  build:{
+    outDir:resolve(__dirname, 'docs')
   }
 })
