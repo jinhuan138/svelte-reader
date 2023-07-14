@@ -1,6 +1,6 @@
 {
   "name": "svelte-reader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/modules/index.ts",
   "files": [
     "src/modules"
