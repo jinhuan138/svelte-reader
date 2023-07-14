@@ -1,6 +1,9 @@
 # Svelte Reader - an easy way to embed a ePub into your webapp
 An svelte-reader for svelte powered by EpubJS
 
+## Demo
+[Demo](https://jinhuan138.github.io/svelte-reader/)
+
 ## Basic usage
 
 ```bash
@@ -11,10 +14,11 @@ And in your svelte-component...
 
 ```svelte
 <script>
-  import { SvelteReader} from "svelte-reader";
+  import { SvelteReader } from "svelte-reader";
 </script>
-<div style='height: 100vh'>
-    <SvelteReader url='/files/啼笑因缘.epub'/>
+
+<div style="height: 100vh">
+  <SvelteReader url="/files/啼笑因缘.epub" />
 </div>
 ```
 
@@ -75,15 +79,16 @@ Saving the current page on storage is pretty simple, but we need to keep in mind
 
 ```svelte
 <script>
-  import { SvelteReader} from "svelte-reader";
+  import { SvelteReader } from "svelte-reader";
+
   let location = localStorage.getItem("book-progress") || null;
   let firstRenderDone = false;
+
   const locationChange = (e) => {
     const epubcifi = e.detail;
     // Since this function is also called on initial rendering, we are using custom state
     // logic to check if this is the initial render.
     // If you block this function from running (i.e not letting it change the page on the first render) your app crashes.
-
     if (!firstRenderDone) {
       location = localStorage.getItem("book-progress");
       return (firstRenderDone = true);
@@ -119,7 +124,6 @@ We store the epubjs rendition in a ref, and get the page numbers in the callback
   const getRendition = (val) => (rendition = val);
 
   const getLabel = (toc, href) => {
-    console.log(toc)
     let label = "n/a";
     toc.some((item) => {
       if (item.subitems.length > 0) {
@@ -136,7 +140,6 @@ We store the epubjs rendition in a ref, and get the page numbers in the callback
     return label;
   };
   const locationChange = (e) => {
-    console.log(e.detail)
     const epubcifi= e.detail
     if (epubcifi) {
       const { displayed, href } = rendition.location.start;
@@ -160,7 +163,7 @@ We store the epubjs rendition in a ref, and get the page numbers in the callback
   { page }
 </div>
 
-<style scoped>
+<style>
   .page {
     position: absolute;
     bottom: 1rem;
@@ -171,4 +174,171 @@ We store the epubjs rendition in a ref, and get the page numbers in the callback
     color: #000;
   }
 </style>
+```
+
+## Change font-size
+
+Hooking into epubJS rendition object is the key for this also.
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+
+  let rendition = null;
+  let size = 100;
+  const changeSize = (val) => {
+    size = val;
+    rendition.themes.fontSize(`${val}%`);
+  };
+  const getRendition = (val) => {
+    rendition = val;
+    rendition.themes.fontSize(`${size}%`);
+  };
+</script>
+
+<div style="height: 100vh">
+  <SvelteReader url="/files/啼笑因缘.epub" {getRendition} />
+</div>
+<div class="size">
+  <button on:click={() => changeSize(Math.max(80, size - 10))}>-</button>
+  <span>Current size: {size}%</span>
+  <button on:click={() => changeSize(Math.min(130, size + 10))}>+</button>
+</div>
+
+<style>
+  .size {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    z-index: 1;
+    text-align: center;
+    color: #000;
+  }
+</style>
+```
+
+## Hightlight selection in epub
+
+This shows how to hook into epubJS annotations object and let the user highlight selection and store this in a list where user can go to a selection or delete it.
+
+```svelte
+<script>
+  import { onDestroy } from "svelte";
+  import { SvelteReader } from "svelte-reader";
+
+  let rendition = null;
+  let selections =[]
+
+  const setRenderSelection = (cfiRange, contents) => {
+    selections = [...selections,{text: rendition.getRange(cfiRange).toString(),cfiRange}];
+    rendition.annotations.add("highlight", cfiRange, {}, null, "hl", {
+      fill: "red",
+      "fill-opacity": "0.5",
+      "mix-blend-mode": "multiply",
+    });
+    contents.window.getSelection().removeAllRanges();
+  };
+
+  const getRendition = (val) => {
+    rendition = val;
+    rendition.themes.default({
+      "::selection": {
+        background: "orange",
+      },
+    });
+    rendition.on("selected", setRenderSelection);
+  };
+
+  const remove = (cfiRange, index) => {
+    rendition.annotations.remove(cfiRange, "highlight");
+    selections = selections.filter((item, j) => j !== index);
+  };
+
+  onDestroy(() => {
+    rendition.off("selected", setRenderSelection);
+  });
+</script>
+
+<div style="height: 100vh">
+  <SvelteReader url="/files/啼笑因缘.epub" {getRendition} />
+</div>
+<div class="selection">
+  Selection:
+  <ul>
+    {#each selections as { text, cfiRange }, index}
+      <li>
+        {text || ""}
+        <button on:click={() => rendition.display(cfiRange)}>show</button>
+        <button on:click={() => remove(cfiRange, index)}>x</button>
+      </li>
+    {/each}
+  </ul>
+</div>
+
+<style>
+  .selection {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    z-index: 1;
+    background-color: white;
+    color: #000;
+  }
+</style>
+```
+
+## Handling missing mime-types on server
+
+EpubJS will try to parse the epub-file you pass to it, but if the server send wrong mine-types or the file does not contain `.epub` you can use the epubInitOptions prop to force reading it right.
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+</script>
+
+<div style="height: 100vh">
+  <SvelteReader url="/my-epub-service" epubInitOptions={{ openAs: "epub" }} />
+</div>
+```
+
+## Display a scrolled epub-view
+
+Pass options for this into epubJS in the prop `epubOptions`
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+</script>
+
+<div style="height: 100vh">
+  <SvelteReader
+    url="/files/啼笑因缘.epub"
+    epubOptions={{
+      flow: "scrolled",
+      manager: "continuous",
+    }}
+  />
+</div>
+```
+
+## Enable opening links / running scripts inside epubjs iframe
+
+Epubjs is rendering the epub-content inside and iframe which defaults to `sandbox="allow-same-origin"`, to enable opening links or running javascript in an epub, you will need to pass some extra params in the `epubOptions` prop.
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+</script>
+
+<div style="height: 100vh">
+  <SvelteReader
+    url="/files/啼笑因缘.epub"
+    epubOptions={{
+      allowPopups: true, // Adds `allow-popups` to sandbox-attribute
+      allowScriptedContent: true, // Adds `allow-scripts` to sandbox-attribute
+    }}
+  />
+</div>
 ```

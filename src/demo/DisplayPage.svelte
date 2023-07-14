@@ -1,5 +1,5 @@
 <script>
-  import { SvelteReader } from "../modules/index";
+  import { SvelteReader } from "svelte-reader";
 
   let rendition = null,
     toc = [];
@@ -7,7 +7,6 @@
   const getRendition = (val) => (rendition = val);
 
   const getLabel = (toc, href) => {
-    console.log(toc)
     let label = "n/a";
     toc.some((item) => {
       if (item.subitems.length > 0) {
@@ -23,9 +22,9 @@
     });
     return label;
   };
+
   const locationChange = (e) => {
-    console.log(e.detail)
-    const epubcifi= e.detail
+    const epubcifi = e.detail;
     if (epubcifi) {
       const { displayed, href } = rendition.location.start;
       if (href !== "titlepage.xhtml") {
@@ -40,15 +39,15 @@
   <SvelteReader
     url="/svelte-reader/files/啼笑因缘.epub"
     {getRendition}
-    tocChanged={val=>toc = val}
+    tocChanged={(val) => (toc = val)}
     on:update:location={locationChange}
   />
 </div>
 <div class="page">
-  { page }
+  {page}
 </div>
 
-<style scoped>
+<style>
   .page {
     position: absolute;
     bottom: 1rem;

@@ -1,13 +1,14 @@
 <script>
-  import { SvelteReader } from "../modules/index";
+  import { SvelteReader } from "svelte-reader";
+
   let location = localStorage.getItem("book-progress") || null;
   let firstRenderDone = false;
+
   const locationChange = (e) => {
     const epubcifi = e.detail;
     // Since this function is also called on initial rendering, we are using custom state
     // logic to check if this is the initial render.
     // If you block this function from running (i.e not letting it change the page on the first render) your app crashes.
-
     if (!firstRenderDone) {
       location = localStorage.getItem("book-progress");
       return (firstRenderDone = true);
