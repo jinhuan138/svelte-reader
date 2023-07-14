@@ -7,16 +7,17 @@
   export let showToc = true;
   export let url = "";
   export let title = "";
+  export let getRendition;
 
   let bookName = "",
-    tocChanged,
-    getRendition;
+    tocChanged;
   let expandedToc = false;
   let currentLocation = null;
   let epubRef = null;
   let toc = [];
 
   const onGetRendition = (rendition) => {
+    console.log("onGetRendition");
     getRendition && getRendition(rendition);
     rendition.on("relocated", (location) => {
       currentLocation = location;
@@ -74,9 +75,9 @@
     <EpubView
       bind:this={epubRef}
       {url}
+      {...$$props}
       tocChanged={onTocChange}
       getRendition={onGetRendition}
-      {...$$props}
       on:update:location={(e) => dispatch("update:location", e.detail)}
     >
       <slot name="loadingView" />
@@ -324,16 +325,5 @@
 
   .next {
     right: 1px;
-  }
-
-  /* loading */
-  .loadingView {
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    right: 10%;
-    color: #ccc;
-    text-align: center;
-    margin-top: -0.5em;
   }
 </style>
