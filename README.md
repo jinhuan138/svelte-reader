@@ -342,3 +342,270 @@ Epubjs is rendering the epub-content inside and iframe which defaults to `sandbo
   />
 </div>
 ```
+
+## Get book information
+
+```svelte
+    <SvelteReader url='/files/啼笑因缘.epub' getRendition={getRendition}>
+    </SvelteReader>
+
+    {#if information}
+    <div style='color: #000'>
+        <img src={information.cover} alt={information.title} style="width: 100px">
+        <p>标题:{information.title }</p>
+        <p>作者:{ information.creator }</p>
+        <p>出版社:{information.publisher }</p>
+        <p>语言:{ information.language }</p>
+        <p>出版日期:{ information.pubdate }</p>
+        <p>修改日期:{ information.modified_date }</p>
+        <p>介绍:{ information.description }</p>
+    </div>
+{/if}
+    
+<script>
+import { SvelteReader } from "svelte-reader";
+let information = null
+const getRendition = (rendition) => {
+    const book = rendition.book
+    book.ready.then(() => {
+        book.loaded.metadata.then(async (metadata) => {
+            const cover = await book.coverUrl()
+            information = { ...metadata, cover }
+        })
+    })
+}
+</script>
+```
+
+## Import file
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+
+  let url = null;
+  const onchange = (e) => {
+    const file = e.target.files[0];
+    if (window.FileReader) {
+      var reader = new FileReader();
+      reader.onloadend = (e) => (url = reader.result);
+      reader.readAsArrayBuffer(file);
+    }
+  };
+</script>
+
+<div style="position: relative;height: 100vh;">
+  {#if url}
+    <div style="height: 100vh">
+      <SvelteReader {url} />
+    </div>
+  {/if}
+  <input
+    type="file"
+    multiple={false}
+    accept=".epub"
+    on:change={onchange}
+    class="input"
+  />
+</div>
+
+<style>
+  .input {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    z-index: 1;
+  }
+</style>
+```
+
+## Current progress
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+
+  let current = 0;
+  let rendition, book, displayed;
+
+  const getRendition = (val) => {
+    rendition = val;
+    book = rendition.book;
+    displayed = rendition.display();
+    book.ready
+      .then(() => {
+        return book.locations.generate(1600);
+      })
+      .then((locations) => {
+        // Wait for book to be rendered to get current page
+        displayed.then(function () {
+          // Get the current CFI
+          var currentLocation = rendition.currentLocation();
+          // Get the Percentage (or location) from that CFI
+          const currentPage = book.locations.percentageFromCfi(
+            currentLocation.start.cfi
+          );
+          current = currentPage;
+        });
+        rendition.on("relocated", (location) => {
+          const percent = book.locations.percentageFromCfi(location.start.cfi);
+          const percentage = Math.floor(percent * 100);
+          current = percentage;
+        });
+      });
+  };
+
+  const change = (e) => {
+    const value = e.target.value;
+    current= value;
+    var cfi = book.locations.cfiFromPercentage(value / 100);
+    rendition.display(cfi);
+  };
+</script>
+
+<div style="position: relative">
+  <div style="height: 100vh">
+    <SvelteReader
+      getRendition={getRendition}
+      url="/files/啼笑因缘.epub"
+    />
+  </div>
+  <div class="progress">
+    <input
+      type="number"
+      value={current}
+      min={0}
+      max={100}
+      on:change={change}
+    />%
+    <input
+      type="range"
+      value={current}
+      min={0}
+      max={100}
+      step={1}
+      on:change={change}
+    />
+  </div>
+</div>
+
+<style>
+  .progress {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    z-index: 1;
+    color: #000;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .progress > input[type="number"] {
+    text-align: center;
+  }
+
+  .progress > input[type="range"] {
+    width: 100%;
+  }
+</style>
+```
+
+## Search in the book
+
+```svelte
+<script>
+  import { SvelteReader } from "svelte-reader";
+  let rendition = null;
+  let searchText = "只在捻花一笑中";
+  let searchResults = [];
+
+  const search = async () => {
+    if (!searchText) return (searchResults = []);
+    const res = await doSearch(searchText);
+    searchResults = res.slice(0, 5);
+  };
+
+  const doSearch = (value) => {
+    const { book } = rendition;
+    return Promise.all(
+      book.spine.spineItems.map((item) => {
+        return item.load(book.load.bind(book)).then((doc) => {
+          const res = item.find(value);
+          item.unload();
+          return Promise.resolve(res);
+        });
+      })
+    ).then((res) => Promise.resolve([].concat.apply([], res)));
+  };
+
+  const go = (href, e) => {
+    rendition.display(href);
+    e.stopPropagation();
+    e.preventDefault();
+  };
+</script>
+
+<div style="position: relative">
+  <div style="height: 100vh">
+    <SvelteReader
+      url="/files/啼笑因缘.epub"
+      getRendition={(val) => (rendition = val)}
+    />
+  </div>
+  <div class="search">
+    <input
+      value={searchText}
+      on:input={(e) => (searchText = e.target.value)}
+      type="text"
+      placeholder="search"
+      on:keyup={(e) => e.key === "Enter" && search()}
+    />
+    <div class="searchResults">
+      {#each searchResults as item, index}
+        <div class="item" on:click={(e) => go(item.cfi, e)}>
+            {@html item.excerpt.trim().replace(searchText, `<span style="color: orange">${searchText}</span>`)}
+        </div>
+      {/each}
+      {#if !searchResults.length}
+        <div>Empty</div>
+      {/if}
+    </div>
+  </div>
+</div>
+
+<style>
+  .search {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    text-align: center;
+    z-index: 1;
+    color: #000;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search .searchResults {
+    width: 200px;
+  }
+
+  .search .searchResults .item {
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #000;
+  }
+
+  .search .searchResults .item:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+</style>
+```
