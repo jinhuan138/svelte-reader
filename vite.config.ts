@@ -4,7 +4,9 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/svelte-reader",
-  plugins: [svelte()],
+  plugins: [
+    svelte(),
+  ],
   publicDir: 'public',
   resolve: {
     extensions: ['.ts', '.js'],
@@ -15,7 +17,7 @@ export default defineConfig({
   server: {
     port: 8030,
   },
-  build:{
-    outDir:resolve(__dirname, 'docs')
+  build: {
+    outDir: resolve(__dirname, 'docs')
   }
 })

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from "svelte";
-  import ePub, { Book, Rendition, Contents } from "epubjs";
+  import { Book, Rendition, Contents } from "epubjs";
   import {
     clickListener,
     swipListener,
@@ -16,6 +16,7 @@
   export let handleKeyPress;
   export let epubInitOptions = {};
   export let epubOptions = {};
+  let ePub;
 
   const dispatch = createEventDispatcher();
 
@@ -131,11 +132,14 @@
   };
 
   $: {
-    if (url) initBook();
+    if (url && ePub) initBook();
   }
 
   onMount(() => {
-    initBook();
+    import("epubjs").then(({ default: model }) => {
+      ePub = model;
+      initBook();
+    });
   });
 </script>
 

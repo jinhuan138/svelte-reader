@@ -1,0 +1,22 @@
+{
+  "name": "svelte-reader/docs",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^2.0.2",
+    "@sveltejs/kit": "^1.22.3",
+    "@sveltepress/theme-default": "^1.17.0",
+    "@sveltepress/vite": "^0.26.0",
+    "@types/node": "^20.4.2",
+    "svelte": "^4.0.5",
+    "svelte-reader": "^1.0.4",
+    "sveltedoc-parser": "^4.2.1",
+    "vite": "^4.4.4"
+  },
+  "type": "module",
+  "license": "MIT"
+}
