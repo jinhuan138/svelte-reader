@@ -1,6 +1,6 @@
 {
   "name": "svelte-reader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/modules/index.ts",
   "files": [
     "src/modules"
@@ -48,7 +48,6 @@
     "svelte-check": "^3.3.1",
     "svelte-preprocess": "^5.0.4",
     "svelte-spa-router": "^3.3.0",
-    "svelte-reader": "^1.0.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
