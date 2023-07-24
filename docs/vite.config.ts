@@ -18,22 +18,6 @@ const config = defineConfig({
         },
         github: 'https://github.com/jinhuan138/svelte-reader',
         logo: '/sveltepress.svg',
-        themeColor: {
-          light: '#f2f2f2',
-          dark: '#18181b',
-        },
-        preBuildIconifyIcons: {
-          'vscode-icons': ['file-type-svelte', 'file-type-markdown', 'file-type-vite'],
-          'logos': ['typescript-icon', 'svelte-kit'],
-          'emojione': ['artist-palette'],
-          'ph': ['smiley', 'layout-duotone'],
-          'noto': ['package'],
-          'solar': ['chat-square-code-outline', 'reorder-outline'],
-          'carbon': ['tree-view-alt', 'import-export'],
-          'ic': ['sharp-rocket-launch'],
-          'tabler': ['icons'],
-          'mdi': ['theme-light-dark'],
-        },
       }),
       siteConfig: {
         title: 'svelte-reader',
