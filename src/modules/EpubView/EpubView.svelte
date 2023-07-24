@@ -12,8 +12,8 @@
   export let getRendition;
   export let location;
   export let tocChanged;
-  export let handleTextSelected;
-  export let handleKeyPress;
+  export let handleTextSelected = () => {};
+  export let handleKeyPress = () => {};
   export let epubInitOptions = {};
   export let epubOptions = {};
   let ePub;

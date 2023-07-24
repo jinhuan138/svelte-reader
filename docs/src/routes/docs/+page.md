@@ -76,11 +76,13 @@ Saving the current page on storage is pretty simple, but we need to keep in mind
 ```svelte
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { browser } from '$app/environment';
 
-  let location = localStorage.getItem("book-progress") || null;
+  let location = browser && localStorage.getItem("book-progress") || null;
   let firstRenderDone = false;
 
   const locationChange = (e) => {
+    if(!browser) return
     const epubcifi = e.detail;
     // Since this function is also called on initial rendering, we are using custom state
     // logic to check if this is the initial render.
@@ -272,7 +274,7 @@ This shows how to hook into epubJS annotations object and let the user highlight
   </ul>
 </div>
 
-<!-- <style>
+<style>
   .selection {
     position: absolute;
     bottom: 1rem;
@@ -282,7 +284,7 @@ This shows how to hook into epubJS annotations object and let the user highlight
     background-color: white;
     color: #000;
   }
-</style> -->
+</style>
 ```
 
 ## Handling missing mime-types on server

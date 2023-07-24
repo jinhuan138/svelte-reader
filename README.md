@@ -1,8 +1,8 @@
 # Svelte Reader - an easy way to embed a ePub into your webapp
 An svelte-reader for svelte powered by EpubJS
 
-## Demo
-[Demo](https://jinhuan138.github.io/svelte-reader/)
+## Document
+[document](https://jinhuan138.github.io/svelte-reader-docs/docs)
 
 ## Basic usage
 

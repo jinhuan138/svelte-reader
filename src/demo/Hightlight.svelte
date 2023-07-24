@@ -31,6 +31,7 @@
   };
 
   onDestroy(() => {
+    console.log(rendition)
     rendition.off("selected", setRenderSelection);
   });
 </script>
