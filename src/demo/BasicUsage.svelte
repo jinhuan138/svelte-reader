@@ -1,5 +1,5 @@
 <script>
-  import { SvelteReader } from "../modules/index.ts";
+  import { SvelteReader } from "svelte-reader";
 </script>
 
 <div style="height: 100vh">

@@ -8,9 +8,9 @@
   export let url = "";
   export let title = "";
   export let getRendition;
+  export let tocChanged;
 
-  let bookName = "",
-    tocChanged;
+  let bookName = "";
   let expandedToc = false;
   let currentLocation = null;
   let epubRef = null;

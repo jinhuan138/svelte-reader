@@ -1,5 +1,5 @@
 <script>
-  import { SvelteReader } from "svelte-reader";
+  import { SvelteReader } from "../../src/modules/index";
 
   let rendition = null,
     toc = [];
