@@ -18,5 +18,8 @@
     "vite": "^4.4.1"
   },
   "type": "module",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "workbox-window": "^7.0.0"
+  }
 }
