@@ -6,14 +6,23 @@ import { vitePreprocess } from '@sveltejs/kit/vite'
 const config = {
   extensions: ['.svelte', '.md'],
   preprocess: [vitePreprocess()],
+  base: "/svelte-reader-docs",
+  scope: '/svelte-reader-docs',
   kit: {
     adapter: adapter({
       pages: 'dist',
+      fallback: '404.html',
     }),
     files: {
       assets: '../public',
     },
-    alias: { '@': './src' }
+    alias: { '@': './src' },
+    paths: {
+      base: "/svelte-reader-docs",
+    },
+    prerender: {
+      entries: []
+    }
   },
 }
 
