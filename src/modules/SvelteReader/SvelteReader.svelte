@@ -17,7 +17,6 @@
   let toc = [];
 
   const onGetRendition = (rendition) => {
-    console.log("onGetRendition");
     getRendition && getRendition(rendition);
     rendition.on("relocated", (location) => {
       currentLocation = location;
