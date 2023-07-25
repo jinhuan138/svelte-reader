@@ -50,11 +50,11 @@
     "svelte-spa-router": "^3.3.0",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "svelte-reader": "1.0.5"
   },
   "dependencies": {
-    "epubjs": "^0.3.93",
-    "svelte-reader": "1.0.5"
+    "epubjs": "^0.3.93"
   },
   "browserslist": [
     "defaults",

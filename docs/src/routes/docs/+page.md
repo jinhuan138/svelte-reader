@@ -11,10 +11,11 @@ And in your svelte-component...
 ```svelte live ln title=basic-usage
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 </script>
 
 <div style="height: 100vh">
-  <SvelteReader url="/svelte-reader-docs/files/啼笑因缘.epub" />
+  <SvelteReader url="{base}/files/啼笑因缘.epub" />
 </div>
 ```
 
@@ -77,6 +78,7 @@ Saving the current page on storage is pretty simple, but we need to keep in mind
 <script>
   import { SvelteReader } from "svelte-reader";
   import { browser } from '$app/environment';
+  import { base } from "$app/paths";
 
   let location = browser && localStorage.getItem("book-progress") || null;
   let firstRenderDone = false;
@@ -101,7 +103,7 @@ Saving the current page on storage is pretty simple, but we need to keep in mind
 
 <div style="height: 100vh">
   <SvelteReader
-    url="/svelte-reader-docs/files/啼笑因缘.epub"
+    url="{base}/files/啼笑因缘.epub"
     {location}
     on:update:location={locationChange}
   />
@@ -115,6 +117,7 @@ We store the epubjs rendition in a ref, and get the page numbers in the callback
 ```svelte live ln title=display-page
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 
   let rendition = null,
     toc = [];
@@ -152,7 +155,7 @@ We store the epubjs rendition in a ref, and get the page numbers in the callback
 <div style='position: relative'>
   <div style="height: 100vh">
     <SvelteReader
-      url="/svelte-reader-docs/files/啼笑因缘.epub"
+      url="{base}/files/啼笑因缘.epub"
       {getRendition}
       tocChanged="{val=>toc = val}"
       on:update:location="{locationChange}"
@@ -183,6 +186,7 @@ Hooking into epubJS rendition object is the key for this also.
 ```svelte live ln title=change-font-size
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 
   let rendition = null;
   let size = 100;
@@ -198,7 +202,7 @@ Hooking into epubJS rendition object is the key for this also.
 
 <div style='position: relative'>
   <div style="height: 100vh">
-    <SvelteReader url="/svelte-reader-docs/files/啼笑因缘.epub" {getRendition} />
+    <SvelteReader url="{base}/files/啼笑因缘.epub" {getRendition} />
   </div>
   <div class="size">
     <button on:click="{() => changeSize(Math.max(80, size - 10))}">-</button>
@@ -228,6 +232,7 @@ This is useful for when you want to set custom font families, custom background 
 ```svelte live ln title=custom-css
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 
   const getRendition = (rendition) => {
     rendition.themes.register("custom", {
@@ -250,7 +255,7 @@ This is useful for when you want to set custom font families, custom background 
 </script>
 
 <div style="height: 100vh">
-  <SvelteReader url="/svelte-reader-docs/files/啼笑因缘.epub" {getRendition} />
+  <SvelteReader url="{base}/files/啼笑因缘.epub" {getRendition} />
 </div>
 ```
 
@@ -263,6 +268,7 @@ This shows how to hook into epubJS annotations object and let the user highlight
 <script>
   import { onDestroy } from "svelte";
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 
   let rendition = null;
   let selections =[]
@@ -295,7 +301,7 @@ This shows how to hook into epubJS annotations object and let the user highlight
 
 <div style='position: relative'>
   <div style="height: 100vh">
-    <SvelteReader url="/svelte-reader-docs/files/啼笑因缘.epub" getRendition="{getRendition}" />
+    <SvelteReader url="{base}/files/啼笑因缘.epub" getRendition="{getRendition}" />
   </div>
   <div class="selection">
     Selection:
@@ -345,11 +351,12 @@ Pass options for this into epubJS in the prop `epubOptions`
 ```svelte live ln title=display-scrolled
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 </script>
 
 <div style="height: 100vh">
   <SvelteReader
-    url="/svelte-reader-docs/files/啼笑因缘.epub"
+    url="{base}/files/啼笑因缘.epub"
     epubOptions="{{
       flow: "scrolled",
       manager: "continuous",
@@ -365,11 +372,12 @@ Epubjs is rendering the epub-content inside and iframe which defaults to `sandbo
 ```svelte
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 </script>
 
 <div style="height: 100vh">
   <SvelteReader
-    url="/files/啼笑因缘.epub"
+    url="{base}/files/啼笑因缘.epub"
     epubOptions="{{
       allowPopups: true, // Adds `allow-popups` to sandbox-attribute
       allowScriptedContent: true, // Adds `allow-scripts` to sandbox-attribute
@@ -382,6 +390,7 @@ Epubjs is rendering the epub-content inside and iframe which defaults to `sandbo
 ```svelte svelte live ln title=speak-text
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 
   let isAudioOn = false,
     text = "",
@@ -432,7 +441,7 @@ Epubjs is rendering the epub-content inside and iframe which defaults to `sandbo
 <div style="position: relative">
   <div style="height: 100vh">
     <SvelteReader
-      url="/svelte-reader-docs/files/啼笑因缘.epub"
+      url="{base}/files/啼笑因缘.epub"
       getRendition={(val) => (rendition = val)}
       on:update:location={locationChange}
     />
@@ -459,7 +468,7 @@ Epubjs is rendering the epub-content inside and iframe which defaults to `sandbo
 ## Get book information
 
 ```svelte svelte live ln title=get-information
-    <SvelteReader url='/svelte-reader-docs/files/啼笑因缘.epub' getRendition="{getRendition}">
+    <SvelteReader url='{base}/files/啼笑因缘.epub' getRendition="{getRendition}">
     </SvelteReader>
 
     {#if information}
@@ -476,17 +485,19 @@ Epubjs is rendering the epub-content inside and iframe which defaults to `sandbo
 {/if}
     
 <script>
-import { SvelteReader } from "svelte-reader";
-let information = null
-const getRendition = (rendition) => {
-    const book = rendition.book
-    book.ready.then(() => {
-        book.loaded.metadata.then(async (metadata) => {
-            const cover = await book.coverUrl()
-            information = { ...metadata, cover }
-        })
-    })
-}
+  import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
+
+  let information = null
+  const getRendition = (rendition) => {
+      const book = rendition.book
+      book.ready.then(() => {
+          book.loaded.metadata.then(async (metadata) => {
+              const cover = await book.coverUrl()
+              information = { ...metadata, cover }
+          })
+      })
+  }
 </script>
 ```
 
@@ -538,6 +549,7 @@ const getRendition = (rendition) => {
 ```svelte svelte live ln title=current-progress
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
 
   let current = 0;
   let rendition, book, displayed;
@@ -581,7 +593,7 @@ const getRendition = (rendition) => {
   <div style="height: 100vh">
     <SvelteReader
       getRendition="{getRendition}"
-      url="/svelte-reader-docs/files/啼笑因缘.epub"
+      url="{base}/files/啼笑因缘.epub"
     />
   </div>
   <div class="progress">
@@ -631,6 +643,8 @@ const getRendition = (rendition) => {
 ```svelte svelte live ln title=search-book
 <script>
   import { SvelteReader } from "svelte-reader";
+  import { base } from "$app/paths";
+
   let rendition = null;
   let searchText = "只在捻花一笑中";
   let searchResults = [];
@@ -664,7 +678,7 @@ const getRendition = (rendition) => {
 <div style="position: relative">
   <div style="height: 100vh">
     <SvelteReader
-      url="/svelte-reader-docs/files/啼笑因缘.epub"
+      url="{base}/files/啼笑因缘.epub"
       getRendition="{(val) => (rendition = val)}"
     />
   </div>
