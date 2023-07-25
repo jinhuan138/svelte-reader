@@ -14,6 +14,5 @@ git init
 git add .
 git commit -m 'deploy'
 
-git push -f git@github.com:jinhuan138/svelte-reader-docs.git
-
+git push -f git@github.com:jinhuan138/jinhuan138.git master
 cd -
