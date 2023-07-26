@@ -28,8 +28,8 @@ devDependencies:
     specifier: ^4.0.5
     version: 4.0.5
   svelte-reader:
-    specifier: 1.0.5
-    version: 1.0.5
+    specifier: 1.0.6
+    version: 1.0.6
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -4725,8 +4725,8 @@ packages:
     dependencies:
       svelte: 4.0.5
 
-  /svelte-reader@1.0.5:
-    resolution: {integrity: sha512-LcO1ZrqoRWfx4xqYyANrvlzT7RVP9Op/8aNIlTwSVFxG8sMf9zKs+9PbhGhcnMXGHOuf4W6cpsluJqTbKW/HiA==}
+  /svelte-reader@1.0.6:
+    resolution: {integrity: sha512-LuaCmwPvWYFDjmLUJuNluEX/nrbNpqs6XWNG1jFRPcJt/nqCOJ5sMe9szjN1k0ByHTWirlZNvUryhllZt4u1oQ==}
     dependencies:
       epubjs: 0.3.93
     dev: true
