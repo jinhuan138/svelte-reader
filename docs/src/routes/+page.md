@@ -2,7 +2,7 @@
 title: svelte-reader
 description: an easy way to embed a ePub into your webapp
 tagline: an easy way to embed a ePub into your webapp
-heroImage: /sveltepress.svg
+# heroImage: /svelte-reader-docs/sveltepress.svg
 actions:
   - label: 阅读文档
     to:  /docs

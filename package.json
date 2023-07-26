@@ -1,6 +1,6 @@
 {
   "name": "svelte-reader",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "main": "src/modules/index.ts",
   "files": [
     "src/modules"
@@ -16,6 +16,7 @@
     "type": "git",
     "url": "git@github.com:jinhuan138/svelte-reader.git"
   },
+  "homepage": "https://jinhuan138.github.io/",
   "bugs": {
     "url": "https://github.com/jinhuan138/svelte-reader/issues"
   },
