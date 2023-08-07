@@ -16,7 +16,7 @@ const config = defineConfig({
         sidebar: {
           // Add your sidebar configs here
         },
-        github: 'https://github.com/jinhuan138/svelte-reader',
+        github: 'https://jinhuan138.github.io/svelte-reader-docs/docs',
         logo: '/sveltepress.svg',
       }),
       siteConfig: {
