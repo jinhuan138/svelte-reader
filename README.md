@@ -2,7 +2,7 @@
 An svelte-reader for svelte powered by EpubJS
 
 ## Document
-[document](https://jinhuan138.github.io/svelte-reader-docs/docs/)
+[document](https://jinhuan138.github.io/svelte-reader/docs/)
 
 ## Basic usage
 
