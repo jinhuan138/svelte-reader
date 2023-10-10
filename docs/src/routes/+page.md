@@ -5,7 +5,7 @@ tagline: an easy way to embed a ePub into your webapp
 heroImage: /sveltepress.svg
 actions:
   - label: 阅读文档
-    to:  /docs
+    to:  /svelte-reader/docs
     type: primary
   - label: 在 Github 上查看
     type: flat

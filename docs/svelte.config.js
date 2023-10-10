@@ -14,7 +14,7 @@ const config = {
     }),
     alias: { '@': './src' },
     paths: {
-      base: '/svelte-reader-docs',
+      base: '/svelte-reader',
     },
     prerender: {
       handleHttpError: ({ path, referrer, message }) => {

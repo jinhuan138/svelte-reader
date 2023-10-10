@@ -11,8 +11,10 @@ npm run build
 cd dist
 
 git init
-git add .
+git checkout -b gh-pages
+git remote add origin git@github.com:jinhuan138/svelte-reader.git
+git add . 
 git commit -m 'deploy'
 
-git push -f git@github.com:jinhuan138/svelte-reader-docs.git master
+git push -f origin gh-pages
 cd -
