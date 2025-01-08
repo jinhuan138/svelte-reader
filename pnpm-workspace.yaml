@@ -1,2 +1,4 @@
 packages:
   - docs
+catalog:
+  svelte-reader: ^1.1.1
